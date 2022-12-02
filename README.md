@@ -18,7 +18,7 @@
 
 ## Live Demo
 
-[Live demo link](hhttps://krugerstar-emoji-dc.netlify.app/)
+[Live demo link](https://krugerstar-emoji-dc.netlify.app/)
 
 ## 🖥️ Run it locally 
 
