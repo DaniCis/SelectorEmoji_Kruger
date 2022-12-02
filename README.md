@@ -6,7 +6,7 @@
 
 ## App Preview
  
-
+<img src="./src/assets/emoji-preview.png" height="250px">
 
 ## Built with 
 
@@ -18,7 +18,7 @@
 
 ## Live Demo
 
-[Live demo link](https://krugerstar-emoji-dc.netlify.app/)
+[Live demo link](hhttps://krugerstar-emoji-dc.netlify.app/)
 
 ## 🖥️ Run it locally 
 
