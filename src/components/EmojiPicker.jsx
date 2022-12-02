@@ -5,11 +5,13 @@ import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import EmojiSearch from "./EmojiSearch";
 import EmojiButton from "./EmojiButton";
+import EmojiCategory from "./EmojiCategory";
 
 export default forwardRef ((props, refInput) => {
 
     const [isOpen,setIsOpen] = useState(false)
     const [emojis,setEmojis] = useState([])
+    const [categories,setCategories] = useState([])
     
     const containerRef = useRef(null)
 
@@ -24,7 +26,22 @@ export default forwardRef ((props, refInput) => {
 
     const loadInfo = async () =>{
         try{
-            const response = await fetch(`${process.env.REACT_APP_URL}&access_key=${process.env.REACT_APP_KEY}`)
+            const response = await fetch(`${process.env.REACT_APP_URL}emojis?&access_key=${process.env.REACT_APP_KEY}`)
+            if(response.ok){
+                const responseJSON = await response.json()
+                const categorias = responseJSON.map(emoji => emoji.group)
+                const categoriasSR= categorias.filter((valor,indice) =>  categorias.indexOf(valor) === indice)
+                setCategories(categoriasSR.slice(3,8))
+                setEmojis(responseJSON.slice(0,70))
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+    const searchCategories = async (cat) =>{
+        try{
+            console.log(cat)
+            const response = await fetch(`${process.env.REACT_APP_URL}categories/${cat}?access_key=${process.env.REACT_APP_KEY}`)
             if(response.ok){
                 const responseJSON = await response.json()
                 setEmojis(responseJSON.slice(0,70))
@@ -35,31 +52,23 @@ export default forwardRef ((props, refInput) => {
     }
     const searchInfo = async (query) =>{
         try{
-            const response = await fetch(`${process.env.REACT_APP_URL}search=${query}&access_key=${process.env.REACT_APP_KEY}`)
+            const response = await fetch(`${process.env.REACT_APP_URL}emojis?search=${query}&access_key=${process.env.REACT_APP_KEY}`)
             if(response.ok){
                 const responseJSON = await response.json()
                 if(responseJSON !== null)
                     setEmojis(responseJSON.slice(0,70))
-                else
-                    console.log('no')
             }
         }catch(e){
             console.log(e)
         }
     }
-
     const handleSearch = (e) =>{
         const query = e.target.value.toLowerCase()
-        if (query !== null){
-            console.log(query)
+        if (query !== null)
             searchInfo(query)
-        }else{
+        else
             setEmojis(emojis)
-        }
-            
-        
     }
-
     const handleClickEmoji = (emoji) =>{
         const cursorPos = refInput.current.selectionStart
         const text = refInput.current.value
@@ -88,6 +97,14 @@ export default forwardRef ((props, refInput) => {
                             <Col xs={{span:11,offset:1}} md={{span:7,offset:3}} xl={{span:4, offset:4}}>
                                 {emojis.map(emoji => (
                                     <EmojiButton key={emoji.unicodeName} emoji={emoji} onClick={handleClickEmoji}/>
+                                ))}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="contenedorCategoria" 
+                                xs={{span:10,offset:1}} md={{span:7,offset:3}} xl={{span:4, offset:4}}>
+                                {categories.map((category,index) => (
+                                    <EmojiCategory key={index} category={category} onClick={()=>searchCategories(category)}/>
                                 ))}
                             </Col>
                         </Row>

@@ -16,3 +16,6 @@ body{
     display: flex;
     justify-content: center;
 }
+.contenedorCategoria{
+    margin-top: 10px!important;
+}
